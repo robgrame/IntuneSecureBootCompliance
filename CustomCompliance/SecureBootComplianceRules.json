@@ -1,0 +1,69 @@
+{
+  "Rules": [
+    {
+      "SettingName": "FirmwareType",
+      "Operator": "IsEquals",
+      "DataType": "String",
+      "Operand": "Uefi",
+      "MoreInfoUrl": "https://learn.microsoft.com/windows-hardware/manufacture/desktop/boot-to-uefi-mode-or-legacy-bios-mode",
+      "RemediationStrings": [
+        { "Language": "en_US", "Title": "Device is running in legacy BIOS mode",
+          "Description": "The device must boot in UEFI mode to support Secure Boot. Contact IT to convert the system (MBR2GPT + firmware switch)." },
+        { "Language": "it_IT", "Title": "Dispositivo in modalità BIOS legacy",
+          "Description": "Il dispositivo deve avviarsi in modalità UEFI per supportare Secure Boot. Contattare IT per la conversione (MBR2GPT + cambio firmware)." }
+      ]
+    },
+    {
+      "SettingName": "SecureBootEnabled",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://learn.microsoft.com/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process",
+      "RemediationStrings": [
+        { "Language": "en_US", "Title": "Secure Boot is disabled",
+          "Description": "Secure Boot must be enabled in the UEFI firmware. Restart the device, enter the UEFI menu, enable Secure Boot, and save the configuration. Contact IT if the option is locked." },
+        { "Language": "it_IT", "Title": "Secure Boot disabilitato",
+          "Description": "Secure Boot deve essere abilitato nel firmware UEFI. Riavviare il dispositivo, entrare nel menu UEFI, abilitare Secure Boot e salvare. Contattare IT se l'opzione è bloccata." }
+      ]
+    },
+    {
+      "SettingName": "InSetupMode",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": false,
+      "MoreInfoUrl": "https://learn.microsoft.com/windows-hardware/manufacture/desktop/windows-secure-boot-key-creation-and-management-guidance",
+      "RemediationStrings": [
+        { "Language": "en_US", "Title": "Platform is in Secure Boot Setup Mode",
+          "Description": "The UEFI is in Setup Mode (no platform key enrolled). Restore default Secure Boot keys from the UEFI firmware menu. Contact IT." },
+        { "Language": "it_IT", "Title": "Piattaforma in Setup Mode di Secure Boot",
+          "Description": "L'UEFI è in Setup Mode (nessuna Platform Key enrollata). Ripristinare le chiavi Secure Boot predefinite dal menu UEFI. Contattare IT." }
+      ]
+    },
+    {
+      "SettingName": "DbHasMsProductionCa",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://techcommunity.microsoft.com/blog/intune-customer-success/",
+      "RemediationStrings": [
+        { "Language": "en_US", "Title": "Microsoft Windows Production CA missing",
+          "Description": "The Secure Boot DB does not contain the Microsoft Windows Production PCA 2011 certificate required to boot Windows. Restore default Secure Boot keys from the UEFI menu or apply the vendor firmware update." },
+        { "Language": "it_IT", "Title": "Microsoft Windows Production CA mancante",
+          "Description": "Il DB di Secure Boot non contiene il certificato Microsoft Windows Production PCA 2011 necessario per avviare Windows. Ripristinare le chiavi Secure Boot predefinite dal menu UEFI o applicare l'aggiornamento firmware del vendor." }
+      ]
+    },
+    {
+      "SettingName": "TpmReady",
+      "Operator": "IsEquals",
+      "DataType": "Boolean",
+      "Operand": true,
+      "MoreInfoUrl": "https://learn.microsoft.com/windows/security/hardware-security/tpm/initialize-and-configure-ownership-of-the-tpm",
+      "RemediationStrings": [
+        { "Language": "en_US", "Title": "TPM is not ready",
+          "Description": "TPM must be present, enabled and ready. Enable TPM in firmware. Contact IT if it remains unavailable." },
+        { "Language": "it_IT", "Title": "TPM non pronto",
+          "Description": "Il TPM deve essere presente, abilitato e pronto. Abilitare il TPM nel firmware. Contattare IT se rimane non disponibile." }
+      ]
+    }
+  ]
+}
