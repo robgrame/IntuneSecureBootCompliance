@@ -120,6 +120,25 @@ Il cert firmatario (o la sua CA) deve essere distribuito come
 **Trusted Publisher / Trusted Root** sui device target (Intune →
 Configuration profiles → Certificates).
 
+## Reporting aggregato
+
+`Reporting\Get-SecureBootComplianceReport.ps1` interroga Microsoft Graph
+(`deviceManagement/deviceHealthScripts/{id}/deviceRunStates`), estrae la
+riga `SECUREBOOT_DIAG={json}` e produce CSV + (opzionale) HTML con una
+riga per device + sommario delle cause più frequenti.
+
+```powershell
+Install-Module Microsoft.Graph -Scope CurrentUser
+Connect-MgGraph -Scopes DeviceManagementManagedDevices.Read.All,DeviceManagementConfiguration.Read.All
+.\Reporting\Get-SecureBootComplianceReport.ps1 `
+    -ScriptId '<GUID-del-detection-script>' `
+    -OutputCsv .\secureboot.csv `
+    -OutputHtml .\secureboot.html
+```
+
+`ScriptId` reperibile dall'URL del Remediation nel portale Intune o via
+`Get-MgBetaDeviceManagementDeviceHealthScript` per displayName.
+
 ## Scope
 
 - Windows 10 / Windows 11 client
