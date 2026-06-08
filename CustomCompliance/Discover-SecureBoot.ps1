@@ -30,6 +30,13 @@ function Get-FirmwareType {
     }
 }
 
+# Suppress non-stdout streams; Custom Compliance discovery must emit ONE JSON line only
+$ErrorActionPreference   = 'SilentlyContinue'
+$WarningPreference       = 'SilentlyContinue'
+$VerbosePreference       = 'SilentlyContinue'
+$InformationPreference   = 'SilentlyContinue'
+$ProgressPreference      = 'SilentlyContinue'
+
 try {
     $firmware  = Get-FirmwareType
     $sbEnabled = $false
@@ -77,10 +84,11 @@ try {
         NonComplianceReasons = ($reasons -join ' | ')
     }
 
-    return ($result | ConvertTo-Json -Compress)
+    Write-Output ($result | ConvertTo-Json -Compress)
+    exit 0
 }
 catch {
-    return (@{
+    Write-Output (@{
         FirmwareType         = "Unknown"
         SecureBootEnabled    = $false
         InSetupMode          = $false
@@ -91,4 +99,5 @@ catch {
         TpmEnabled           = $false
         NonComplianceReasons = "Discovery error: $($_.Exception.Message)"
     } | ConvertTo-Json -Compress)
+    exit 0
 }
