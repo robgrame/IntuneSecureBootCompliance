@@ -9,16 +9,16 @@
     Must be code-signed; the signing cert (or its CA) must be a Trusted
     Publisher / Trusted Root on target devices.
 
-    Output schema:
-        FirmwareType         : string  (Uefi | Bios | Unknown)
-        SecureBootEnabled    : boolean
-        InSetupMode          : boolean
-        DbHasMsProductionCa  : boolean
-        DbHasUefiCa2023      : boolean
-        TpmPresent           : boolean
-        TpmReady             : boolean
-        TpmEnabled           : boolean
-        NonComplianceReasons : string  (' | ' separated)
+    Output schema (all keys prefixed SB_ to identify them in Intune Settings reports):
+        SB_FirmwareType         : string  (Uefi | Bios | Unknown)
+        SB_SecureBootEnabled    : boolean
+        SB_InSetupMode          : boolean
+        SB_DbHasMsProductionCa  : boolean
+        SB_DbHasUefiCa2023      : boolean
+        SB_TpmPresent           : boolean
+        SB_TpmReady             : boolean
+        SB_TpmEnabled           : boolean
+        SB_NonComplianceReasons : string  (' | ' separated)
 #>
 
 function Get-FirmwareType {
@@ -73,15 +73,15 @@ try {
     if (-not $tpmReady)           { $reasons.Add("TPM not ready") }
 
     $result = [ordered]@{
-        FirmwareType         = "$firmware"
-        SecureBootEnabled    = [bool]$sbEnabled
-        InSetupMode          = [bool]$setupMode
-        DbHasMsProductionCa  = [bool]$hasMsCa
-        DbHasUefiCa2023      = [bool]$hasCa2023
-        TpmPresent           = [bool]$tpmPresent
-        TpmReady             = [bool]$tpmReady
-        TpmEnabled           = [bool]$tpmEnabled
-        NonComplianceReasons = ($reasons -join ' | ')
+        SB_FirmwareType         = "$firmware"
+        SB_SecureBootEnabled    = [bool]$sbEnabled
+        SB_InSetupMode          = [bool]$setupMode
+        SB_DbHasMsProductionCa  = [bool]$hasMsCa
+        SB_DbHasUefiCa2023      = [bool]$hasCa2023
+        SB_TpmPresent           = [bool]$tpmPresent
+        SB_TpmReady             = [bool]$tpmReady
+        SB_TpmEnabled           = [bool]$tpmEnabled
+        SB_NonComplianceReasons = ($reasons -join ' | ')
     }
 
     Write-Output ($result | ConvertTo-Json -Compress)
@@ -89,15 +89,15 @@ try {
 }
 catch {
     Write-Output (@{
-        FirmwareType         = "Unknown"
-        SecureBootEnabled    = $false
-        InSetupMode          = $false
-        DbHasMsProductionCa  = $false
-        DbHasUefiCa2023      = $false
-        TpmPresent           = $false
-        TpmReady             = $false
-        TpmEnabled           = $false
-        NonComplianceReasons = "Discovery error: $($_.Exception.Message)"
+        SB_FirmwareType         = "Unknown"
+        SB_SecureBootEnabled    = $false
+        SB_InSetupMode          = $false
+        SB_DbHasMsProductionCa  = $false
+        SB_DbHasUefiCa2023      = $false
+        SB_TpmPresent           = $false
+        SB_TpmReady             = $false
+        SB_TpmEnabled           = $false
+        SB_NonComplianceReasons = "Discovery error: $($_.Exception.Message)"
     } | ConvertTo-Json -Compress)
     exit 0
 }

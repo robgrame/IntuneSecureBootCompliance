@@ -79,13 +79,19 @@ nel Company Portal *cosa* fare quando il device è non conforme.
 
 | Campo | Tipo | Note |
 |------|------|------|
-| FirmwareType | String | `Uefi` / `Bios` / `Unknown` |
-| SecureBootEnabled | Boolean | |
-| InSetupMode | Boolean | UEFI in setup mode = mancano le chiavi platform |
-| DbHasMsProductionCa | Boolean | Microsoft Windows Production PCA 2011 |
-| DbHasUefiCa2023 | Boolean | Windows UEFI CA 2023 (post-rollout) |
-| TpmPresent / TpmReady / TpmEnabled | Boolean | |
-| NonComplianceReasons | String | concatenate con ` \| ` |
+| SB_FirmwareType | String | `Uefi` / `Bios` / `Unknown` |
+| SB_SecureBootEnabled | Boolean | |
+| SB_InSetupMode | Boolean | UEFI in setup mode = mancano le chiavi platform |
+| SB_DbHasMsProductionCa | Boolean | Microsoft Windows Production PCA 2011 |
+| SB_DbHasUefiCa2023 | Boolean | Windows UEFI CA 2023 (post-rollout) |
+| SB_TpmPresent / SB_TpmReady / SB_TpmEnabled | Boolean | |
+| SB_NonComplianceReasons | String | concatenate con ` \| ` |
+
+> **Nota sui prefissi `SB_`** — Tutti i setting custom usano prefisso `SB_`
+> per essere immediatamente identificabili nei report *Reports → Endpoint
+> security → Device compliance → Per-setting status* e nel drill-down
+> per-device del portale Intune. I nomi nel JSON delle regole devono
+> corrispondere esattamente alle chiavi emesse dal discovery script.
 
 ## Mappa cause → azione
 

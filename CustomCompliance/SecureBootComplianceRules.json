@@ -1,7 +1,7 @@
 {
   "Rules": [
     {
-      "SettingName": "FirmwareType",
+      "SettingName": "SB_FirmwareType",
       "Operator": "IsEquals",
       "DataType": "String",
       "Operand": "Uefi",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "SettingName": "SecureBootEnabled",
+      "SettingName": "SB_SecureBootEnabled",
       "Operator": "IsEquals",
       "DataType": "Boolean",
       "Operand": true,
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "SettingName": "InSetupMode",
+      "SettingName": "SB_InSetupMode",
       "Operator": "IsEquals",
       "DataType": "Boolean",
       "Operand": false,
@@ -40,7 +40,7 @@
       ]
     },
     {
-      "SettingName": "DbHasMsProductionCa",
+      "SettingName": "SB_DbHasMsProductionCa",
       "Operator": "IsEquals",
       "DataType": "Boolean",
       "Operand": true,
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "SettingName": "TpmReady",
+      "SettingName": "SB_TpmReady",
       "Operator": "IsEquals",
       "DataType": "Boolean",
       "Operand": true,
