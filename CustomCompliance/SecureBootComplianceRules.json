@@ -1,10 +1,10 @@
 {
   "Rules": [
     {
-      "SettingName": "SB_FirmwareType",
+      "SettingName": "SB_IsFirmwareUefi",
       "Operator": "IsEquals",
-      "DataType": "String",
-      "Operand": "Uefi",
+      "DataType": "Boolean",
+      "Operand": true,
       "MoreInfoUrl": "https://learn.microsoft.com/windows-hardware/manufacture/desktop/boot-to-uefi-mode-or-legacy-bios-mode",
       "RemediationStrings": [
         { "Language": "en_US", "Title": "Device is running in legacy BIOS mode",
@@ -14,7 +14,7 @@
       ]
     },
     {
-      "SettingName": "SB_SecureBootEnabled",
+      "SettingName": "SB_IsSecureBootEnabled",
       "Operator": "IsEquals",
       "DataType": "Boolean",
       "Operand": true,
@@ -27,10 +27,10 @@
       ]
     },
     {
-      "SettingName": "SB_InSetupMode",
+      "SettingName": "SB_IsNotInSetupMode",
       "Operator": "IsEquals",
       "DataType": "Boolean",
-      "Operand": false,
+      "Operand": true,
       "MoreInfoUrl": "https://learn.microsoft.com/windows-hardware/manufacture/desktop/windows-secure-boot-key-creation-and-management-guidance",
       "RemediationStrings": [
         { "Language": "en_US", "Title": "Platform is in Secure Boot Setup Mode",
@@ -53,7 +53,7 @@
       ]
     },
     {
-      "SettingName": "SB_TpmReady",
+      "SettingName": "SB_IsTpmReady",
       "Operator": "IsEquals",
       "DataType": "Boolean",
       "Operand": true,

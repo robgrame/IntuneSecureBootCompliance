@@ -9,16 +9,26 @@
     Must be code-signed; the signing cert (or its CA) must be a Trusted
     Publisher / Trusted Root on target devices.
 
-    Output schema (all keys prefixed SB_ to identify them in Intune Settings reports):
-        SB_FirmwareType         : string  (Uefi | Bios | Unknown)
-        SB_SecureBootEnabled    : boolean
-        SB_InSetupMode          : boolean
-        SB_DbHasMsProductionCa  : boolean
-        SB_DbHasUefiCa2023      : boolean
-        SB_TpmPresent           : boolean
-        SB_TpmReady             : boolean
-        SB_TpmEnabled           : boolean
-        SB_NonComplianceReasons : string  (' | ' separated)
+    Output schema. Keys prefixed SB_*; *evaluated* settings encode the
+    expected value in the name (Is*/Has*) so the Intune per-setting report
+    is self-documenting (e.g. "SB_IsSecureBootEnabled = Compliant"):
+
+        Evaluated booleans (referenced by SecureBootComplianceRules.json):
+            SB_IsFirmwareUefi       : Bool (true = FirmwareType == 'Uefi')
+            SB_IsSecureBootEnabled  : Bool
+            SB_IsNotInSetupMode     : Bool (true = not in Secure Boot Setup Mode)
+            SB_DbHasMsProductionCa  : Bool
+            SB_IsTpmReady           : Bool
+
+        Raw diagnostic fields (NOT evaluated; emitted for debugging):
+            SB_FirmwareType         : string  (Uefi | Bios | Unknown)
+            SB_SecureBootEnabled    : boolean
+            SB_InSetupMode          : boolean
+            SB_DbHasUefiCa2023      : boolean
+            SB_TpmPresent           : boolean
+            SB_TpmReady             : boolean
+            SB_TpmEnabled           : boolean
+            SB_NonComplianceReasons : string  (' | ' separated)
 #>
 
 function Get-FirmwareType {
@@ -73,10 +83,17 @@ try {
     if (-not $tpmReady)           { $reasons.Add("TPM not ready") }
 
     $result = [ordered]@{
+        # ---- Self-documenting boolean settings evaluated by Custom Compliance rules ----
+        SB_IsFirmwareUefi       = [bool]($firmware -eq 'Uefi')
+        SB_IsSecureBootEnabled  = [bool]$sbEnabled
+        SB_IsNotInSetupMode     = [bool](-not $setupMode)
+        SB_DbHasMsProductionCa  = [bool]$hasMsCa
+        SB_IsTpmReady           = [bool]$tpmReady
+
+        # ---- Raw diagnostic fields (NOT evaluated; carried for debugging) ----
         SB_FirmwareType         = "$firmware"
         SB_SecureBootEnabled    = [bool]$sbEnabled
         SB_InSetupMode          = [bool]$setupMode
-        SB_DbHasMsProductionCa  = [bool]$hasMsCa
         SB_DbHasUefiCa2023      = [bool]$hasCa2023
         SB_TpmPresent           = [bool]$tpmPresent
         SB_TpmReady             = [bool]$tpmReady
@@ -89,10 +106,14 @@ try {
 }
 catch {
     Write-Output (@{
+        SB_IsFirmwareUefi       = $false
+        SB_IsSecureBootEnabled  = $false
+        SB_IsNotInSetupMode     = $false
+        SB_DbHasMsProductionCa  = $false
+        SB_IsTpmReady           = $false
         SB_FirmwareType         = "Unknown"
         SB_SecureBootEnabled    = $false
         SB_InSetupMode          = $false
-        SB_DbHasMsProductionCa  = $false
         SB_DbHasUefiCa2023      = $false
         SB_TpmPresent           = $false
         SB_TpmReady             = $false

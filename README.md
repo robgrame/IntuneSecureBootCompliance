@@ -77,20 +77,33 @@ nel Company Portal *cosa* fare quando il device è non conforme.
 
 ## Schema diagnostico (Custom Compliance)
 
+### Setting valutati (booleani self-documenting, true = compliant)
+
+Il nome del setting incorpora il valore atteso così che il report
+*Per-setting status* del portale sia leggibile senza dover aprire le
+regole. Ogni regola è un semplice `Boolean IsEquals true`.
+
+| SettingName | Significato (true = compliant) |
+|-------------|--------------------------------|
+| SB_IsFirmwareUefi | `FirmwareType == 'Uefi'` |
+| SB_IsSecureBootEnabled | `Confirm-SecureBootUEFI` ritorna true |
+| SB_IsNotInSetupMode | `SetupMode == 0` (chiavi platform installate) |
+| SB_DbHasMsProductionCa | Microsoft Windows Production PCA 2011 in DB |
+| SB_IsTpmReady | `Get-Tpm` TpmReady true |
+
+### Campi raw diagnostici (NON valutati dalle regole)
+
 | Campo | Tipo | Note |
 |------|------|------|
 | SB_FirmwareType | String | `Uefi` / `Bios` / `Unknown` |
 | SB_SecureBootEnabled | Boolean | |
 | SB_InSetupMode | Boolean | UEFI in setup mode = mancano le chiavi platform |
-| SB_DbHasMsProductionCa | Boolean | Microsoft Windows Production PCA 2011 |
 | SB_DbHasUefiCa2023 | Boolean | Windows UEFI CA 2023 (post-rollout) |
 | SB_TpmPresent / SB_TpmReady / SB_TpmEnabled | Boolean | |
 | SB_NonComplianceReasons | String | concatenate con ` \| ` |
 
-> **Nota sui prefissi `SB_`** — Tutti i setting custom usano prefisso `SB_`
-> per essere immediatamente identificabili nei report *Reports → Endpoint
-> security → Device compliance → Per-setting status* e nel drill-down
-> per-device del portale Intune. I nomi nel JSON delle regole devono
+> **Pattern di naming** — Prefisso `SB_` + valore atteso nel nome
+> (`Is*Uefi`, `IsNotInSetupMode`...). I nomi nel JSON delle regole devono
 > corrispondere esattamente alle chiavi emesse dal discovery script.
 
 ## Mappa cause → azione
