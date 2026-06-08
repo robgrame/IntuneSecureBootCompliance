@@ -9,13 +9,32 @@ Stessa architettura **two-tier** della soluzione gemella
 [IntuneBitLockerCompliance](https://github.com/robgrame/IntuneBitLockerCompliance):
 
 ```
+Inventory/
+  Detect-SecureBootState.ps1          # Inventario stato (detection-only, exit 0)
 Remediations/
-  Detect-SecureBootCompliance.ps1     # Intune Remediations - detection
+  Detect-SecureBootCompliance.ps1     # Intune Remediations - detection (compliance)
   Remediate-SecureBootCompliance.ps1  # Intune Remediations - guidance only
 CustomCompliance/
   Discover-SecureBoot.ps1             # Discovery script (DEVE essere firmato)
   SecureBootComplianceRules.json      # Regole + messaggi IT/EN per Company Portal
+Reporting/
+  Get-SecureBootComplianceReport.ps1  # Aggregazione Graph dei detection compliance
+  Get-SecureBootInventoryReport.ps1   # Aggregazione Graph dei detection inventory
 ```
+
+## Livello A0 — Inventario puro (detection-only)
+
+Per il caso d'uso "voglio solo la fotografia dello stato Secure Boot di
+tutta la flotta", usare `Inventory\Detect-SecureBootState.ps1`:
+
+- raccoglie Manufacturer/Model/BIOS version, FirmwareType, SecureBoot,
+  SetupMode, certificati nel DB (MsProductionCa2011, UefiCa2023,
+  ThirdParty), dimensione DBX (proxy della freschezza), TPM completo
+- output `SECUREBOOT_STATE={json}`
+- **exit 0 sempre** → ogni device contribuisce all'inventario
+
+Deployment: Remediation con solo il Detection script (Remediation vuoto).
+Aggregazione con `Reporting\Get-SecureBootInventoryReport.ps1`.
 
 ## Livello A — Intune Remediations (visibilità immediata)
 
